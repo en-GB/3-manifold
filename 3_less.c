@@ -1,7 +1,7 @@
 
 #if 0
 
-python 3_roomgen.py && clang -m64 $0 -std=c99 -Wall -Werror -Wno-unused -Wno-string-plus-int -Os -o ${0%.*}.exe -static -lglfw3 -lGdi32 &&
+python3 3_roomgen.py && clang -m64 $0 -std=c99 -Wall -Werror -Wno-unused -Wno-string-plus-int -Os -o ${0%.*}.exe -static -lglfw3 -lGdi32 &&
 
 exec ${0%.*}.exe "$@"
 exit 0
