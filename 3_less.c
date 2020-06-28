@@ -1,7 +1,6 @@
 
 #if 0
 
-
 python 3_roomgen.py && clang -m64 $0 -std=c99 -Wall -Werror -Wno-unused -Wno-string-plus-int -Os -o ${0%.*}.exe -static -lglfw3 -lGdi32 &&
 
 exec ${0%.*}.exe "$@"
@@ -147,9 +146,6 @@ fn View View_through_bwd(View v, float z, float a, float b, float c, float d) {
 	return v;
 }
 
-vr float player_speed;
-vr float player_x, player_y, player_z;
-vr void *player_room;
 vr int u_xy_id;
 vr int u_yz_id;
 vr int u_zx_id;
@@ -362,6 +358,12 @@ fn void loop(GLFWwindow *window) {
 	if(glfwRawMouseMotionSupported())
 		glfwSetInputMode(window, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
 	
+	int jump = 0;
+	int _ix = 0;
+	int _iy = 0;
+	int _iz = 0;
+	int _ij = 0;
+	
 	while(!glfwWindowShouldClose(window)) {
 		double time = glfwGetTime();
 		
@@ -372,9 +374,6 @@ fn void loop(GLFWwindow *window) {
 			room12._d = -10*g*cos(g*gtime);
 			room13._d = +10*g*cos(g*gtime);
 		}
-		
-		vr double vblank = 0;
-		vr double next = 0;
 		
 		float dt = time - gtime;
 		gtime = time;
@@ -402,18 +401,12 @@ fn void loop(GLFWwindow *window) {
 		float air_accel = 150;
 		
 		{
-			vr int jump = 0;
 			
 			int ix = glfwGetKey(window, GLFW_KEY_D) - glfwGetKey(window, GLFW_KEY_A);
 			int iy = glfwGetKey(window, GLFW_KEY_E) - glfwGetKey(window, GLFW_KEY_Q);
 			int iz = glfwGetKey(window, GLFW_KEY_W) - glfwGetKey(window, GLFW_KEY_S);
 			int ij = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT);
 			ij |= glfwGetKey(window, GLFW_KEY_SPACE);
-			
-			vr int _ix = 0;
-			vr int _iy = 0;
-			vr int _iz = 0;
-			vr int _ij = 0;
 			
 			float gspeed = 1;
 			if(ix && iz) gspeed = 1.0 / sqrt(2.0);
@@ -459,7 +452,7 @@ fn void loop(GLFWwindow *window) {
 			if(dist < 1.1f) {
 				
 				if(!jump) {
-					jump |= (player_speed < bhop_limit) & ij & ~_ij;
+					jump |= ij && !_ij;
 					v.vy += dt * ((1 - dist) * 24 - v.vy) * 24;
 				}
 				
@@ -525,12 +518,6 @@ fn void loop(GLFWwindow *window) {
 			_iy = iy;
 			_iz = iz;
 		}
-		
-		player_x = v.px;
-		player_y = v.py;
-		player_z = v.pz;
-		player_room = r;
-		player_speed = sqrtf(v.vx*v.vx + v.vz*v.vz);
 		
 		float rx = cosf(H);
 		float ry = 0;
