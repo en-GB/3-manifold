@@ -1,8 +1,9 @@
 # 3-manifold
 
-https://www.youtube.com/watch?v=CBPTcUxIISQ
+- i made this around 2016
 
-i made this around 2016
+
+https://www.youtube.com/watch?v=CBPTcUxIISQ
 
 to run this, execute 3_less_release.c
 
