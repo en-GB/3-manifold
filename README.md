@@ -6,7 +6,7 @@ i made this around 2016
 
 
 
-to run, execute 3_less_release.c
+to run, execute 3_less.c
 
 if your not using windows you probably have to change the compiler flags at the top
 
