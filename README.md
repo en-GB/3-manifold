@@ -20,6 +20,3 @@ the level is defined in roomgen.py starting on line 421
 - to install clang type in ``pacman -S mingw-w64-x86_64-clang`` and press enter 
 - to install glfw type in ``pacman -S mingw-w64-x86_64-glfw`` and press enter
 - then drag 3_less.c into the window and press enter
-
-
-if you have trouble talk to the people here: https://discord.gg/du5raYh
