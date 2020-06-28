@@ -34,22 +34,24 @@ do { \
 typedef struct View View;
 typedef struct Room Room;
 
+// a camera basically
 struct View {
-	float xy[4];
-	float yz[4];
+	float xy[4]; // vision cone
+	float yz[4]; // (for clipping)
 	float zx[4];
-	float px, py, pz;
-	float vx, vy, vz;
+	float px, py, pz; // position
+	float vx, vy, vz; // we need the velocity aswell
 };
 
 struct Room {
-	float w, h, d;
-	float _w, _h, _d;
+	float w, h, d; // dimensions
+	float _w, _h, _d; // d/dt dimensions
 	void (*render)(View v);
 	View (*update)(View v, Room **r, float w, float d, float dt);
 	float (*cast_down)(View v, float d);
 };
 
+// clip a view against a door to the right
 fn View View_through_rgt(View v, float x, float a, float b, float c, float d) {
 	
 	x -= v.px;
@@ -66,6 +68,7 @@ fn View View_through_rgt(View v, float x, float a, float b, float c, float d) {
 	return v;
 }
 
+// same for the left
 fn View View_through_lft(View v, float x, float a, float b, float c, float d) {
 	
 	x -= v.px;
@@ -82,6 +85,7 @@ fn View View_through_lft(View v, float x, float a, float b, float c, float d) {
 	return v;
 }
 
+// and so on
 fn View View_through_uwd(View v, float y, float a, float b, float c, float d) {
 	
 	a -= v.px;
@@ -157,6 +161,8 @@ vr int test_counter = 0;
 
 #undef fn
 #define fn static __attribute__((noinline))
+// hardcoding the level is probably a bad idea
+// but it works
 #include "3_roomgen_output.h"
 #undef fn
 #define fn static
@@ -223,18 +229,16 @@ fn void loop(GLFWwindow *window) {
 	
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	
+	// i use clip planes for this
 	glEnable(GL_CLIP_PLANE0);
 	glEnable(GL_CLIP_PLANE1);
 	glEnable(GL_CLIP_PLANE2);
 	glEnable(GL_CLIP_PLANE3);
 	glEnable(GL_CLIP_PLANE4);
 	glEnable(GL_CLIP_PLANE5);
+	// because the stencil buffer is slow and annoying
 	
 	unsigned prog = create_program("#version 150\n" string(
-		
-		vec2 I(vec2 v) {
-			return vec2(-v.y, v.x);
-		}
 		
 		uniform vec4 u_xy;
 		uniform vec4 u_yz;
@@ -250,6 +254,8 @@ fn void loop(GLFWwindow *window) {
 		out vec3 v_nor;
 		out vec3 v_pos;
 		
+		// this is a cube mesh
+		// im too lazy for vertex buffers :/
 		const vec3 vert[6 * 4] = vec3[]
 		( vec3(-1.,-1.,-1.),vec3(-1.,-1.,+1.),vec3(-1.,+1.,+1.),vec3(-1.,+1.,-1.)
 		, vec3(-1.,-1.,-1.),vec3(+1.,-1.,-1.),vec3(+1.,-1.,+1.),vec3(-1.,-1.,+1.)
@@ -269,10 +275,6 @@ fn void loop(GLFWwindow *window) {
 		, vec3( 0.,-1., 0.)
 		, vec3( 0., 0.,-1.)
 		);
-		
-		vec2 r90(vec2 z) {
-			return vec2(-z.y, z.x);
-		}
 		
 		void main() {
 			v_vert = vert[gl_VertexID] * u_scale;
@@ -318,6 +320,7 @@ fn void loop(GLFWwindow *window) {
 		}
 		
 		void main() {
+			// you can change the colors here
 			vec3 H = fwidth(hash23(floor(gl_FragCoord.xy * .75)));
 			vec3 w = u_scale - abs(v_vert);
 			vec3 a = vec3(101.1234, 132.534, 647.12);
@@ -367,6 +370,7 @@ fn void loop(GLFWwindow *window) {
 	while(!glfwWindowShouldClose(window)) {
 		double time = glfwGetTime();
 		
+		// that one tunnel that keeps growing and shrinking
 		{
 			float g = 2;
 			room12.d = 10.1 - 10*sin(g*gtime);
@@ -393,7 +397,6 @@ fn void loop(GLFWwindow *window) {
 		if(H > +3.1415926f) H -= 6.2831852f;
 		if(H < -3.1415926f) H += 6.2831852f;
 		
-		float bhop_limit = 150;
 		float speed = 8 - 4 * glfwGetKey(window, GLFW_KEY_LEFT_SHIFT);
 		float accel = 100;
 		float friction = 50;
@@ -410,6 +413,7 @@ fn void loop(GLFWwindow *window) {
 			
 			float gspeed = 1;
 			if(ix && iz) gspeed = 1.0 / sqrt(2.0);
+			// adjust speed when moving diagonally
 			
 			float rx = cosf(H);
 			float ry = 0;
@@ -426,6 +430,7 @@ fn void loop(GLFWwindow *window) {
 			float dx = (ix*rx + iz*fx) * gspeed;
 			float dz = (ix*rz + iz*fz) * gspeed;
 			
+			// i honestly dont know why i didnt just write a boxcast back then
 			float dist = 1e20f;
 			for(int a = 0; a < 20; a++)
 			for(int b = 0; b < 20; b++) {
@@ -554,7 +559,7 @@ int main(int argc, char *args[]) {
 	if(!glfwInit())
 		return -1;
 	
-	glfwWindowHint(GLFW_SAMPLES, 4);
+	glfwWindowHint(GLFW_SAMPLES, 4); // you can comment this out for more frames
 	
 	GLFWmonitor *monitor = glfwGetPrimaryMonitor();
 	const GLFWvidmode *mode = glfwGetVideoMode(monitor);
