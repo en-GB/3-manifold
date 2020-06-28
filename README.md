@@ -1,6 +1,9 @@
 # 3-manifold
 
+
 https://www.youtube.com/watch?v=CBPTcUxIISQ
+
+[![AAAAA](https://img.youtube.com/vi/CBPTcUxIISQ/0.jpg)](https://www.youtube.com/watch?v=CBPTcUxIISQ)
 
 i made this around 2016
 
