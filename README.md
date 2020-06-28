@@ -1,11 +1,12 @@
 # 3-manifold
 
+https://www.youtube.com/watch?v=CBPTcUxIISQ
+
 i made this around 2016
 
 
-https://www.youtube.com/watch?v=CBPTcUxIISQ
 
-to run this, execute 3_less_release.c
+to run, execute 3_less_release.c
 
 if your not using windows you probably have to change the compiler flags at the top
 
