@@ -12,9 +12,8 @@ if your not using windows you probably have to change the compiler flags at the 
 
 the level is defined in roomgen.py starting on line 421
 
-dependencies
-- clang
-- python
-- GLFW
 
-i use msys2 (https://www.msys2.org)
+
+dependencies: clang, python and GLFW
+
+i use this: https://www.msys2.org
