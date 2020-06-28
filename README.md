@@ -16,4 +16,4 @@ the level is defined in roomgen.py starting on line 421
 
 dependencies: clang, python and GLFW
 
-if you have trouble look into the description on youtube or talk to the people here: https://discord.gg/du5raYh
+if you have trouble, look into the description on youtube or talk to the people here: https://discord.gg/du5raYh
