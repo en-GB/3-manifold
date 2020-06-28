@@ -12,8 +12,6 @@ if your not using windows you probably have to change the compiler flags at the 
 
 the level is defined in roomgen.py starting on line 421
 
----
-
 dependencies
 - clang
 - python
