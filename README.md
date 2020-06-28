@@ -12,8 +12,13 @@ if your not using windows you probably have to change the compiler flags at the 
 
 the level is defined in roomgen.py starting on line 421
 
+# windows build instructions:
+
+- install this: https://www.msys2.org/ (make sure you follow steps 5-7 aswell)
+- open mingw64 (c:/msys64/mingw64 is the default install location)
+- to install clang type in ``pacman -S mingw-w64-x86_64-clang`` and press enter 
+- to install glfw type in ``pacman -S mingw-w64-x86_64-glfw`` and press enter
+- then drag 3_less.c into the window and press enter
 
 
-dependencies: clang, python and GLFW
-
-if you have trouble, look at the youtube description or talk to the people here: https://discord.gg/du5raYh
+if you have trouble talk to the people here: https://discord.gg/du5raYh
