@@ -477,14 +477,7 @@ fn void loop(GLFWwindow *window) {
 						}
 					}
 					
-					
-					float slide = dx*v.vz - dz*v.vx;
-					float slide2 = slide*slide;
-					float speed2 = speed*speed;
-					
 					float ground_speed = speed;
-					// if(v.vx*v.vx + v.vz*v.vz < ground_speed*ground_speed) 	{
-					// float ground_speed = speed2 < slide2 ? 0 : sqrtf(speed2 - slide2);
 					if(dx*v.vx + dz*v.vz < ground_speed) {
 						v.vx += dx * dt * accel;
 						v.vz += dz * dt * accel;
