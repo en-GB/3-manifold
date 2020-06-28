@@ -1,6 +1,6 @@
 # 3-manifold
 
-- i made this around 2016
+i made this around 2016
 
 
 https://www.youtube.com/watch?v=CBPTcUxIISQ
@@ -11,6 +11,11 @@ if your not using windows you probably have to change the compiler flags at the 
 
 the level is defined in roomgen.py starting on line 421
 
-dependencies: clang, python and GLFW
+---
+
+dependencies
+- clang
+- python
+- GLFW
 
 i use msys2 (https://www.msys2.org)
