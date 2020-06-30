@@ -238,7 +238,7 @@ fn void loop(GLFWwindow *window) {
 	glEnable(GL_CLIP_PLANE5);
 	// because the stencil buffer is slow and annoying
 	
-	unsigned prog = create_program("#version 150\n" string(
+	unsigned prog = create_program("#version 130\n" string(
 		
 		uniform vec4 u_xy;
 		uniform vec4 u_yz;
@@ -294,7 +294,7 @@ fn void loop(GLFWwindow *window) {
 			, dot(v_pos, u_fwd)
 			, dot(v_pos, u_fwd) * 2.0);
 		}
-	), "#version 150\n" string(
+	), "#version 130\n" string(
 		uniform vec4 u_xy;
 		uniform vec4 u_yz;
 		uniform vec4 u_zx;
