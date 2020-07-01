@@ -20,3 +20,10 @@ the level is defined in roomgen.py starting on line 421
 - to install clang type in ``pacman -S mingw-w64-x86_64-clang`` and press enter 
 - to install glfw type in ``pacman -S mingw-w64-x86_64-glfw`` and press enter
 - then drag 3_less.c into the window and press enter
+
+# arch linux build instructions:
+
+- `pacman -S glfw-x11`
+    - if u use wayland `pacman -S glfw-wayland`
+- `python 3_roomgen.py`
+- `gcc 3_less.c -lglfw -lm -ldl`
