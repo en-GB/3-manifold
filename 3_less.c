@@ -358,8 +358,10 @@ fn void loop(GLFWwindow *window) {
 	glDisable(GL_DEPTH_TEST);
 	glfwSwapInterval(0);
 	
+	#ifdef GLFW_RAW_MOUSE_MOTION
 	if(glfwRawMouseMotionSupported())
 		glfwSetInputMode(window, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
+	#endif
 	
 	int jump = 0;
 	int _ix = 0;
