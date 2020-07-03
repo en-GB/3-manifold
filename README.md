@@ -30,4 +30,4 @@ https://github.com/PyMaster22/manifold-maps
 - `pacman -S glfw-x11`
     - or if you use wayland `pacman -S glfw-wayland`
 - `python 3_roomgen.py`
-- `clang 3_less.c -std=c99 -Wall -Werror -Wno-unused -Wno-string-plus-int -lglfw -lm -ldl`
+- `clang 3_less.c -std=c99 -Wall -Werror -Wno-unused -lglfw -lm -ldl`
