@@ -25,9 +25,19 @@ https://github.com/PyMaster22/manifold-maps
 - to install glfw type in ``pacman -S mingw-w64-x86_64-glfw`` and press enter
 - then drag 3_less.c into the window and press enter
 
-# linux build instructions:
+
+these were contributed by other people so i dont know if they work
+
+# debian/ubuntu build instructions
+- `apt install libglfw3-dev`
+- `apt install clang`
+- `python3 3_roomgen.py`
+- `clang 3_less.c -std=c99 -Wall -Werror -Wno-unused -lglfw -lm -ldl`
+
+# arch linux build instructions:
 
 - `pacman -S glfw-x11`
     - or if you use wayland `pacman -S glfw-wayland`
-- `python 3_roomgen.py`
+- `pacman -S clang`
+- `python3 3_roomgen.py`
 - `clang 3_less.c -std=c99 -Wall -Werror -Wno-unused -lglfw -lm -ldl`
