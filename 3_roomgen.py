@@ -386,30 +386,33 @@ def out():
 # b = room(4, 2, 2)
 # fwd(a,0,0, b,0,0, 1, 2)
 
-# RANDOMIZER SCRIPT V1
+# RANDOMIZER SCRIPT V2
 # A lot of improvements are still required but it's a good start
 import random as r
 
 # Differents scales used to generate rooms
-scale0 = r.randint(5,8)
-scale1 = r.randint(6,12)
-scale2 = r.randint(5,10)
-scale3 = r.randint(2,3)
-scale4 = r.randint(22,44)
-scale5 = r.randint(750, 1500)
-scale6 = r.randint(150,500)
+scale0 = r.randint(1,2)
+scale1 = r.randint(1,4)
+scale2 = r.randint(2,6)
+scale3 = r.randint(4,8)
+scale4 = r.randint(6,10)
+scale5 = r.randint(8,12)
+scale6 = r.randint(10,14)
+scale7 = r.randint(28,40)
+scale8 = r.randint(225,375)
+scale9 = r.randint(750,1250)
 #print(scale0)
 
 scale = 1.5
 #print(scale)
 
-a = room(scale0 + r.randint(-3,3), scale0 + r.randint(-3,3), scale0 + r.randint(-3,3))
-b = room(scale0 + r.randint(-3,3), scale0 + r.randint(-3,3), scale0 + r.randint(-3,3))
-c = room(scale0 + r.randint(-3,3), scale0 + r.randint(-3,3), scale0 + r.randint(-3,3))
-d = room(scale0 + r.randint(-3,3), scale0 + r.randint(-3,3), scale0 + r.randint(-3,3))
-e = room(scale0 + r.randint(-3,3), scale0 + r.randint(-3,3), scale0 + r.randint(-3,3))
+a = room(scale2, scale1, scale4)
+b = room(scale2, scale3, scale2)
+c = room(scale2, scale3, scale2)
+d = room(scale2, scale1, scale3)
+e = room(scale2, scale1, scale0)
 
-uwd(a,r.randint(0,5),+4, b,0,0, 4, 2)
+uwd(a,0,+4, b,0,0, 4, 2)
 uwd(a,0,-4, c,0,0, 4, 2)
 
 fwd(d,0,0, b,0,4, 4, 2)
@@ -424,14 +427,14 @@ fwd(e,+2.5,0, a,+2.5,0, 1.5,2)
 # fwd(e,-2.5,0, a,-2.5,0, 1.5,2)
 # fwd(e,-2,0, c,0,10, 1, 2)
 
-col = room(scale1 + r.randint(-2,3), scale1 + r.randint(-2,3), scale1 + r.randint(-2,3))
-cll = room(scale2 + r.randint(-2,3), scale2 + r.randint(-2,3), scale2 + r.randint(-2,3))
-clr = room(scale2 + r.randint(-2,3), scale2 + r.randint(-2,3), scale2 + r.randint(-2,3))
-clf = room(scale2 + r.randint(-2,3), scale2 + r.randint(-2,3), scale2 + r.randint(-2,3))
-clb = room(scale2 + r.randint(-2,3), scale2 + r.randint(-2,3), scale2 + r.randint(-2,3))
+col = room(scale4, scale6, scale4)
+cll = room(scale1, scale2, scale4)
+clr = room(scale1, scale2, scale4)
+clf = room(scale1, scale2, scale3)
+clb = room(scale1, scale2, scale3)
 
-clu = room(scale3, scale3, scale3)
-cld = room(scale3, scale3, scale3)
+clu = room(scale1, scale0, scale1)
+cld = room(scale1, scale0, scale1)
 
 uwd(col,+4,0, clr, 0,0, 2, 6)
 uwd(col,-4,0, cll, 0,0, 2, 6)
@@ -459,10 +462,10 @@ uwd(a,2,0, cld,0,0, 2,2)
 uwd(clu,0,0, d,2,0, 2,2)
 uwd(a,-2,0, d,-2,0, 2,2)
 
-hall1 = room(scale3, scale3, scale4)
-hall2 = room(scale3, scale3, scale4)
-front = room(scale1, scale1, scale1)
-back = room(scale1, scale1, scale1)
+hall1 = room(scale0, scale1, scale7)
+hall2 = room(scale0, scale1, scale7)
+front = room(scale6, scale6, scale3)
+back = room(scale6, scale6, scale3)
 
 fwd(hall2,0,0, a,0,0, 1,2)
 bwd(hall2,0,0, back,0,-10, 1, 2)
@@ -480,17 +483,17 @@ fwd(back,-6.5,0, front,-6.5,0, 5.5, 12)
 # fwd(front, 0,2, front, 0,2, 1, 10)
 fwd(back, 0,2, front, 0,2, 1, 10)
 
-a = room(scale0, scale3, scale3)
-b = room(scale0, scale3, scale3)
-c = room(scale0, scale0, scale0)
-d = room(scale2, scale2, scale2)
+a = room(scale3, scale1, scale1)
+b = room(scale3, scale1, scale1)
+c = room(scale2, scale2, scale2)
+d = room(scale5, scale3, scale5)
 
-e = room(scale3, scale3, scale3)
-f = room(scale3, scale3, scale3)
-g = room(scale0, scale0, scale3)
-h = room(scale0, scale0, scale3)
+e = room(scale1, scale2, scale2)
+f = room(scale1, scale2, scale2)
+g = room(scale4, scale3, scale1)
+h = room(scale4, scale3, scale1)
 
-i = room(scale1, scale0, scale1)
+i = room(scale4, scale2, scale4)
 
 fwd(front,0,-10, a,0,0, 6, 2)
 bwd(back,0,-10, b,0,0, 6, 2)
@@ -534,15 +537,15 @@ uwd(d,0,+4.5, i,0,+4.5, 2,0.5)
 uwd(d,0,-4.5, i,0,-4.5, 2,0.5)
 
 
-cla = room(scale3, scale0, scale3)
-clb = room(scale3, scale0, scale3)
+cla = room(scale1, scale3, scale0)
+clb = room(scale1, scale3, scale0)
 
 fwd(col,+5,0, cla,0,0, 2,6)
 fwd(col,-5,0, clb,0,0, 2,6)
 
 
 
-n0 = room(scale5, scale3, scale6)
+n0 = room(scale9, scale2, scale8)
 
 fwd(n0,-.5,-3, 2,-.5,-.5, .5, .5)
 rgt(n0, 0, 0, n0, 0, 0, 3, 4)
