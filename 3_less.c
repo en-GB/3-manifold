@@ -1,7 +1,6 @@
 
 #if 0
 
-python3 3_roomgen.py && clang -m64 $0 -std=c99 -Wall -Werror -Wno-unused -Os -o ${0%.*}.exe -static -lglfw3 -lGdi32 &&
 
 exec ${0%.*}.exe "$@"
 exit 0
@@ -399,7 +398,9 @@ fn void loop(GLFWwindow *window) {
 		if(H > +3.1415926f) H -= 6.2831852f;
 		if(H < -3.1415926f) H += 6.2831852f;
 		
-		float speed = 8 - 4 * glfwGetKey(window, GLFW_KEY_LEFT_SHIFT);
+		// This modify the player speed
+		// This should be changed depending on the room scale
+		float speed = 12 - 4 * glfwGetKey(window, GLFW_KEY_LEFT_SHIFT);
 		float accel = 100;
 		float friction = 50;
 		float air_speed = 1;
@@ -464,7 +465,9 @@ fn void loop(GLFWwindow *window) {
 				}
 				
 				if(jump) {
-					v.vy = 10;
+					// This value modify the jump height
+					// It should be changed depending on map scale
+					v.vy = 30;
 				} else
 				{
 					
