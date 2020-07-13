@@ -387,7 +387,7 @@ def out():
 # fwd(a,0,0, b,0,0, 1, 2)
 
 # RANDOMIZER SCRIPT V1
-# A lot of improvments are still required but it's a good start
+# A lot of improvements are still required but it's a good start
 import random as r
 
 # Differents scales used to generate rooms
