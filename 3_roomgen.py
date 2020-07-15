@@ -1,3 +1,6 @@
+
+
+
 header = ''
 lsroom = []
 scale = 1
@@ -380,180 +383,278 @@ def out():
 		print('}')
 		index += 1
 
-
-
-# a = room(1, 2, 2)
-# b = room(4, 2, 2)
-# fwd(a,0,0, b,0,0, 1, 2)
-
-# RANDOMIZER SCRIPT V2
-# A lot of improvements are still required but it's a good start
+# RANDOMIZER SCRIPT V3
+# I was too lazy to describe this mess
+# And I was also too lazy to remove all my test and useless things like this alphabet thing
+alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
+scale = 1.5
 import random as r
 
-# Differents scales used to generate rooms
-scale0 = r.randint(1,2)
-scale1 = r.randint(1,4)
-scale2 = r.randint(2,6)
-scale3 = r.randint(4,8)
-scale4 = r.randint(6,10)
-scale5 = r.randint(8,12)
-scale6 = r.randint(10,14)
-scale7 = r.randint(28,40)
-scale8 = r.randint(225,375)
-scale9 = r.randint(750,1250)
-#print(scale0)
+rooms = []
+rooms_codes = []
+rooms_linked = []
+rooms_linked_b = []
 
-scale = 1.5
-#print(scale)
+# generates rooms
+#total_rooms = r.randint(10,20)
+total_rooms = 15
+for i in range(total_rooms):
+	#code = alphabet[r.randint(0,25)] + str(i)
+	#rooms_codes.append(code)
+	s1 = r.randint(2, 15)
+	s2 = r.randint(2, 15)
+	s3 = r.randint(2, 15)
+	n = room(s1,s2,s3)
+	rooms.append(n)
+	#rooms[-1] = room(4,4,4)
 
-a = room(scale2, scale1, scale4)
-b = room(scale2, scale3, scale2)
-c = room(scale2, scale3, scale2)
-d = room(scale2, scale1, scale3)
-e = room(scale2, scale1, scale0)
+#links = r.randint(total_rooms, (total_rooms * 6))
+links = total_rooms
+#print(links)
+#links = 0
+for i in range(2):
+	for i in range(links):
+		side = r.randint(1,4)
+		#start_room = r.randint(0,total_rooms-1)
+		end_room = r.randint(0,total_rooms-1)
+		#if start_room==end_room:
+			#if end_room==0:
+				#end_room += 1
+			#else:
+				#end_room -= 1
 
-uwd(a,0,+4, b,0,0, 4, 2)
-uwd(a,0,-4, c,0,0, 4, 2)
+		#if not (start_room, side) in rooms_linked or not (end_room, side) in rooms_linked:
+		size1 = r.randint(1,5)
+		size2 = r.randint(1,5)
+		offset_start_x = r.randint(-5,5)
+		offset_start_y = r.randint(-5,5)
+		offset_end_x = r.randint(-5,5)
+		offset_end_y = r.randint(-5,5)
+		if side==1:
+			rgt(i,offset_start_x,offset_start_y, end_room,offset_end_x,offset_end_y, size1, size2)
+		elif side==2:
+			lft(i,offset_start_x,offset_start_y, end_room,offset_end_x,offset_end_y, size1, size2)
+		elif side==3:
+			fwd(i,offset_start_x,offset_start_y, end_room,offset_end_x,offset_end_y, size1, size2)
+		elif side==4:
+			bwd(i,offset_start_x,offset_start_y, end_room,offset_end_x,offset_end_y, size1, size2)
+		elif side==5:
+			uwd(i,offset_start_x,offset_start_y, end_room,offset_end_x,offset_end_y, size1, size2)
+		elif side==6:
+			dwn(i,offset_start_x,offset_start_y, end_room,offset_end_x,offset_end_y, size1, size2)
 
-fwd(d,0,0, b,0,4, 4, 2)
-bwd(d,0,0, c,0,4, 4, 2)
+			#rooms_linked.append((start_room, side))
+			#rooms_linked_b.append((end_room, side))
 
-# rgt(a,7,0, b,1,4, 1, 2)
-# fwd(a,3,0, b,+1,0, 1, 2)
-# fwd(b,0,4, b,-1,0, 1, 2)
-fwd(b,0,4, e,0,0, 4, 2)
+#room1 = room(4, 4, 4)
+#room2 = room(4, 4, 4)
+#room3 = room(4, 4, 4)
 
-fwd(e,+2.5,0, a,+2.5,0, 1.5,2)
-# fwd(e,-2.5,0, a,-2.5,0, 1.5,2)
-# fwd(e,-2,0, c,0,10, 1, 2)
+#rgt(room1,0,0, room2,0,0, 2, 2)
+#rgt(room1,0,0, room3,0,0, 2, 2)
 
-col = room(scale4, scale6, scale4)
-cll = room(scale1, scale2, scale4)
-clr = room(scale1, scale2, scale4)
-clf = room(scale1, scale2, scale3)
-clb = room(scale1, scale2, scale3)
+#a = room(4, 2, 8)
+#b = room(4, 6, 4)
+#c = room(4, 6, 4)
+#d = room(4, 2, 6)
+#e = room(4, 2, 1)
 
-clu = room(scale1, scale0, scale1)
-cld = room(scale1, scale0, scale1)
+#uwd(a,0,+4, b,0,0, 4, 2)
+#uwd(a,0,-4, c,0,0, 4, 2)
 
-uwd(col,+4,0, clr, 0,0, 2, 6)
-uwd(col,-4,0, cll, 0,0, 2, 6)
-uwd(clr, 0,0, col,+4,0, 2, 6)
-uwd(cll, 0,0, col,-4,0, 2, 6)
+#fwd(d,0,0, b,0,4, 4, 2)
+#bwd(d,0,0, c,0,4, 4, 2)
 
-lft(clr,+4,0, clf,0,0, 4, 4)
-lft(clr,-4,0, clb,0,0, 4, 4)
-rgt(cll,+4,0, clf,0,0, 4, 4)
-rgt(cll,-4,0, clb,0,0, 4, 4)
+#fwd(b,0,4, e,0,0, 4, 2)
 
-uwd(col,0,+4, clf,0,0, 2, 2)
-uwd(col,0,-4, clb,0,0, 2, 2)
-dwn(col,0,+4, clf,0,0, 2, 2)
-dwn(col,0,-4, clb,0,0, 2, 2)
+#fwd(e,+2.5,0, a,+2.5,0, 1.5,2)
 
-# fwd(clb,0, 0, clf,0,0, 2, 4)
-fwd(col,0, 0, clb,0,0, 2, 4)
-fwd(clf,0, 0, col,0,0, 2, 4)
+#col = room(8, 12, 8)
+#cll = room(2, 4, 8)
+#clr = room(2, 4, 8)
+#clf = room(2, 4, 6)
+#clb = room(2, 4, 6)
 
-uwd(cld,0,0, col,0,0, 2,2)
-uwd(col,0,0, clu,0,0, 2,2)
+#clu = room(2, 1, 2)
+#cld = room(2, 1, 2)
 
-uwd(a,2,0, cld,0,0, 2,2)
-uwd(clu,0,0, d,2,0, 2,2)
-uwd(a,-2,0, d,-2,0, 2,2)
+#uwd(col,+4,0, clr, 0,0, 2, 6)
+#uwd(col,-4,0, cll, 0,0, 2, 6)
+#uwd(clr, 0,0, col,+4,0, 2, 6)
+#uwd(cll, 0,0, col,-4,0, 2, 6)
 
-hall1 = room(scale0, scale1, scale7)
-hall2 = room(scale0, scale1, scale7)
-front = room(scale6, scale6, scale3)
-back = room(scale6, scale6, scale3)
+#lft(clr,+4,0, clf,0,0, 4, 4)
+#lft(clr,-4,0, clb,0,0, 4, 4)
+#rgt(cll,+4,0, clf,0,0, 4, 4)
+#rgt(cll,-4,0, clb,0,0, 4, 4)
 
-fwd(hall2,0,0, a,0,0, 1,2)
-bwd(hall2,0,0, back,0,-10, 1, 2)
+#uwd(col,0,+4, clf,0,0, 2, 2)
+#uwd(col,0,-4, clb,0,0, 2, 2)
+#dwn(col,0,+4, clf,0,0, 2, 2)
+#dwn(col,0,-4, clb,0,0, 2, 2)
 
-fwd(e,+2.5,0, a,+2.5,0, 1.5,2)
-fwd(front,-2.5,0, a,-2.5,0, 1.5,2)
-fwd(a,-2.5,0, back,-2.5,0, 1.5,2)
+#fwd(col,0, 0, clb,0,0, 2, 4)
+#fwd(clf,0, 0, col,0,0, 2, 4)
 
+#uwd(cld,0,0, col,0,0, 2,2)
+#uwd(col,0,0, clu,0,0, 2,2)
 
-fwd(e,0,0, hall1,0,0, 1, 2)
-fwd(hall1,0,0, front,0,-10, 1, 2)
-fwd(back,+6.5,0, front,+6.5,0, 5.5, 12)
-fwd(back,-6.5,0, front,-6.5,0, 5.5, 12)
-# fwd(back, 0,2, back, 0,2, 1, 10)
-# fwd(front, 0,2, front, 0,2, 1, 10)
-fwd(back, 0,2, front, 0,2, 1, 10)
+#uwd(a,2,0, cld,0,0, 2,2)
+#uwd(clu,0,0, d,2,0, 2,2)
+#uwd(a,-2,0, d,-2,0, 2,2)
 
-a = room(scale3, scale1, scale1)
-b = room(scale3, scale1, scale1)
-c = room(scale2, scale2, scale2)
-d = room(scale5, scale3, scale5)
+#hall1 = room(1, 2, 33)
+#hall2 = room(1, 2, 33)
+#front = room(12, 12, 6)
+#back = room(12, 12, 6)
 
-e = room(scale1, scale2, scale2)
-f = room(scale1, scale2, scale2)
-g = room(scale4, scale3, scale1)
-h = room(scale4, scale3, scale1)
+#fwd(hall2,0,0, a,0,0, 1,2)
+#bwd(hall2,0,0, back,0,-10, 1, 2)
 
-i = room(scale4, scale2, scale4)
-
-fwd(front,0,-10, a,0,0, 6, 2)
-bwd(back,0,-10, b,0,0, 6, 2)
-
-lft(a,+.5,-.5, b,+.5,-.5, 0.5,1.5)
-lft(b,+.5,-.5, a,+.5,-.5, 0.5,1.5)
-lft(a,-.5,-.5, a,-.5,-.5, 0.5,1.5)
-lft(b,-.5,-.5, b,-.5,-.5, 0.5,1.5)
-
-# lft(a,0,0, a,0,0, 0.5,1)
-# lft(b,0,0, b,0,0, 0.5,1)
-
-fwd(a,+2,0, b,+2, 0, 2,2)
-bwd(b,-2,0, c,-2,+2, 2,2)
-fwd(a,-2,0, c,-2,-2, 2,2)
-fwd(c,+2,0, c,+2, -2, 2,2)
-
-# uwd(c,0,0, d,0,0, 2,2)
-# uwd(i,0,0, c,0,0, 2,2)
-
-
-uwd(c,+2,0, d,+3,+1, 2,2)
-uwd(c,-2,0, d,-3,-1, 2,2)
-
-rgt(d,0,-4, c,0,-2, 4,2)
-
-rgt(i,0,-2, e,0,-2, 4,2)
-lft(i,0,-2, f,0,-2, 4,2)
-fwd(d,0,-4, g,0,-4, 4,2)
-bwd(d,0,-4, h,0,-4, 4,2)
-
-fwd(e,0,0, g,+6,-2, 2,4)
-fwd(f,0,0, g,-6,-2, 2,4)
-bwd(e,0,0, h,+6,-2, 2,4)
-bwd(f,0,0, h,-6,-2, 2,4)
-
-uwd(d,0,0, i,0,0, 4,4)
-uwd(d,+4.5,0, i,+4.5,0, 0.5,2)
-uwd(d,-4.5,0, i,-4.5,0, 0.5,2)
-uwd(d,0,+4.5, i,0,+4.5, 2,0.5)
-uwd(d,0,-4.5, i,0,-4.5, 2,0.5)
+#fwd(e,+2.5,0, a,+2.5,0, 1.5,2)
+#fwd(front,-2.5,0, a,-2.5,0, 1.5,2)
+#fwd(a,-2.5,0, back,-2.5,0, 1.5,2)
 
 
-cla = room(scale1, scale3, scale0)
-clb = room(scale1, scale3, scale0)
+#fwd(e,0,0, hall1,0,0, 1, 2)
+#fwd(hall1,0,0, front,0,-10, 1, 2)
+#fwd(back,+6.5,0, front,+6.5,0, 5.5, 12)
+#fwd(back,-6.5,0, front,-6.5,0, 5.5, 12)
+#fwd(back, 0,2, front, 0,2, 1, 10)
 
-fwd(col,+5,0, cla,0,0, 2,6)
-fwd(col,-5,0, clb,0,0, 2,6)
+#a = room(6, 2, 2)
+#b = room(6, 2, 2)
+#c = room(4, 4, 4)
+#d = room(10, 6, 10)
+
+#e = room(2, 4, 4)
+#f = room(2, 4, 4)
+#g = room(8, 6, 2)
+#h = room(8, 6, 2)
+
+#i = room(8, 4, 8)
+
+#fwd(front,0,-10, a,0,0, 6, 2)
+#bwd(back,0,-10, b,0,0, 6, 2)
+
+#lft(a,+.5,-.5, b,+.5,-.5, 0.5,1.5)
+#lft(b,+.5,-.5, a,+.5,-.5, 0.5,1.5)
+#lft(a,-.5,-.5, a,-.5,-.5, 0.5,1.5)
+#lft(b,-.5,-.5, b,-.5,-.5, 0.5,1.5)
+
+
+#fwd(a,+2,0, b,+2, 0, 2,2)
+#bwd(b,-2,0, c,-2,+2, 2,2)
+#fwd(a,-2,0, c,-2,-2, 2,2)
+#fwd(c,+2,0, c,+2, -2, 2,2)
 
 
 
-n0 = room(scale9, scale2, scale8)
+#uwd(c,+2,0, d,+3,+1, 2,2)
+#uwd(c,-2,0, d,-3,-1, 2,2)
 
-fwd(n0,-.5,-3, 2,-.5,-.5, .5, .5)
-rgt(n0, 0, 0, n0, 0, 0, 3, 4)
-# fwd(n0, 0, -3, n0, 0, -3, 1, 1)
-fwd(n0,+.5,-3, n0,-.5,-3, .5, .5)
+#rgt(d,0,-4, c,0,-2, 4,2)
+
+#rgt(i,0,-2, e,0,-2, 4,2)
+#lft(i,0,-2, f,0,-2, 4,2)
+#fwd(d,0,-4, g,0,-4, 4,2)
+#bwd(d,0,-4, h,0,-4, 4,2)
+
+#fwd(e,0,0, g,+6,-2, 2,4)
+#fwd(f,0,0, g,-6,-2, 2,4)
+#bwd(e,0,0, h,+6,-2, 2,4)
+#bwd(f,0,0, h,-6,-2, 2,4)
+
+#uwd(d,0,0, i,0,0, 4,4)
+#uwd(d,+4.5,0, i,+4.5,0, 0.5,2)
+#uwd(d,-4.5,0, i,-4.5,0, 0.5,2)
+#uwd(d,0,+4.5, i,0,+4.5, 2,0.5)
+#uwd(d,0,-4.5, i,0,-4.5, 2,0.5)
+
+
+#cla = room(2, 6, 1)
+#clb = room(2, 6, 1)
+
+#fwd(col,+5,0, cla,0,0, 2,6)
+#fwd(col,-5,0, clb,0,0, 2,6)
+
+
+
+#n0 = room(1000, 4, 300)
+
+#fwd(n0,-.5,-3, 2,-.5,-.5, .5, .5)
+#rgt(n0, 0, 0, n0, 0, 0, 3, 4)
+#fwd(n0,+.5,-3, n0,-.5,-3, .5, .5)
+
+# test script 1:
+#links = r.randint(total_rooms, (total_rooms * 6))
+#print(links)
+#links = 0
+#for i in range(links):
+	#side = r.randint(1,6)
+	#start_room = r.randint(0,total_rooms-1)
+	#end_room = r.randint(0,total_rooms-1)
+	#if start_room==end_room:
+		#if end_room==0:
+			#end_room += 1
+		#else:
+			#end_room -= 1
+
+	#if not (start_room, side) in rooms_linked or not (end_room, side) in rooms_linked:
+		#if side==1:
+			#rgt(start_room,0,0, end_room,0,0, 4, 4)
+		#elif side==2:
+			#lft(start_room,0,0, end_room,0,0, 4, 4)
+		#elif side==3:
+			#uwd(start_room,0,0, end_room,0,0, 4, 4)
+		#elif side==4:
+			#dwn(start_room,0,0, end_room,0,0, 4, 4)
+		#elif side==5:
+			#fwd(start_room,0,0, end_room,0,0, 4, 4)
+		#elif side==6:
+			#bwd(start_room,0,0, end_room,0,0, 4, 4)
+
+		#rooms_linked.append((start_room, side))
+		#rooms_linked_b.append((end_room, side))
+
+# test script 2:
+#print(rooms_left)
+#r2 = rooms_left
+# links rooms
+
+#for i in range(6):
+	#while len(rooms_left) > 1:
+		#start = rooms_left[r.randint(0, len(rooms_left)-1)]
+		#end = rooms_left[r.randint(0, len(rooms_left)-1)]
+		#if start==end:
+			#if end==0:
+				#end = rooms_left[r.randint(0, len(rooms_left)-1)]
+			#else:
+				#end = rooms_left[r.randint(0, len(rooms_left)-1)]
+
+		#if i==1:
+			#rgt(start,0,0, end,0,0, 4, 4)
+		#elif i==2:
+			#lft(start,0,0, end,0,0, 4, 4)
+		#elif i==3:
+			#uwd(start,0,0, end,0,0, 4, 4)
+		#elif i==4:
+			#dwn(start,0,0, end,0,0, 4, 4)
+		#elif i==5:
+			#fwd(start,0,0, end,0,0, 4, 4)
+		#elif i==6:
+			#bwd(start,0,0, end,0,0, 4, 4)
+
+		#print(start)
+		#print(end)
+		#print(rooms_left)
+		#rooms_left.remove(start)
+		#print(rooms_left)
+		#rooms_left.remove(end)
+	#rooms_left.clear()
+	#rooms_left.extend(r2)
 
 out()
 import sys
 sys.stdout = open('3_roomgen_output.h', 'w')
 out()
-
