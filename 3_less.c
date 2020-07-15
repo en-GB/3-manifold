@@ -1,7 +1,7 @@
 
 #if 0
 
-python3 3_roomgen.py && clang -m64 $0 -std=c99 -Wall -Werror -Wno-unused -Os -o ${0%.*}.exe -static -lglfw3 -lGdi32 &&
+python3 /f/PC/Docs/Github/3-manifold/3_roomgen.py && clang -m64 $0 -std=c99 -Wall -Werror -Wno-unused -Os -o ${0%.*}.exe -static -lglfw3 -lGdi32 &&
 
 exec ${0%.*}.exe "$@"
 exit 0
@@ -372,14 +372,15 @@ fn void loop(GLFWwindow *window) {
 	while(!glfwWindowShouldClose(window)) {
 		double time = glfwGetTime();
 		
+		// removed tunnel
 		// that one tunnel that keeps growing and shrinking
-		{
-			float g = 2;
-			room12.d = 10.1 - 10*sin(g*gtime);
-			room13.d = 10.1 + 10*sin(g*gtime);
-			room12._d = -10*g*cos(g*gtime);
-			room13._d = +10*g*cos(g*gtime);
-		}
+		//{
+			//float g = 2;
+			//room12.d = 10.1 - 10*sin(g*gtime);
+			//room13.d = 10.1 + 10*sin(g*gtime);
+			//room12._d = -10*g*cos(g*gtime);
+			//room13._d = +10*g*cos(g*gtime);
+		//}
 		
 		float dt = time - gtime;
 		gtime = time;
@@ -399,7 +400,9 @@ fn void loop(GLFWwindow *window) {
 		if(H > +3.1415926f) H -= 6.2831852f;
 		if(H < -3.1415926f) H += 6.2831852f;
 		
-		float speed = 8 - 4 * glfwGetKey(window, GLFW_KEY_LEFT_SHIFT);
+		// This modify the player speed
+		// This should be changed depending on the room scale
+		float speed = 12 - 4 * glfwGetKey(window, GLFW_KEY_LEFT_SHIFT);
 		float accel = 100;
 		float friction = 50;
 		float air_speed = 1;
@@ -464,7 +467,9 @@ fn void loop(GLFWwindow *window) {
 				}
 				
 				if(jump) {
-					v.vy = 10;
+					// This value modify the jump height
+					// It should be changed depending on map scale
+					v.vy = 40;
 				} else
 				{
 					

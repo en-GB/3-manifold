@@ -1,3 +1,7 @@
+# This is a fork of the project 3-manifold to update the roomgen.py to add random rooms sizes
+
+# Original README :
+
 # 3-manifold
 
 
