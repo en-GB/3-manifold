@@ -371,14 +371,15 @@ fn void loop(GLFWwindow *window) {
 	while(!glfwWindowShouldClose(window)) {
 		double time = glfwGetTime();
 		
+		// removed tunnel
 		// that one tunnel that keeps growing and shrinking
-		{
-			float g = 2;
-			room12.d = 10.1 - 10*sin(g*gtime);
-			room13.d = 10.1 + 10*sin(g*gtime);
-			room12._d = -10*g*cos(g*gtime);
-			room13._d = +10*g*cos(g*gtime);
-		}
+		//{
+			//float g = 2;
+			//room12.d = 10.1 - 10*sin(g*gtime);
+			//room13.d = 10.1 + 10*sin(g*gtime);
+			//room12._d = -10*g*cos(g*gtime);
+			//room13._d = +10*g*cos(g*gtime);
+		//}
 		
 		float dt = time - gtime;
 		gtime = time;
@@ -467,7 +468,7 @@ fn void loop(GLFWwindow *window) {
 				if(jump) {
 					// This value modify the jump height
 					// It should be changed depending on map scale
-					v.vy = 30;
+					v.vy = 40;
 				} else
 				{
 					
