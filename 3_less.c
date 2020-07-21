@@ -1,7 +1,7 @@
 
 #if 0
 
-python3 3_roomgen.py && clang -m64 $0 -std=c99 -Wall -Werror -Wno-unused -Wno-string-plus-int -Os -o ${0%.*}.exe -static -lglfw3 -lGdi32 &&
+python3 3_roomgen.py && clang -m64 -mwindows $0 -std=c99 -Wall -Werror -Wno-unused -Os -o ${0%.*}.exe -static -lglfw3 -lGdi32 &&
 
 exec ${0%.*}.exe "$@"
 exit 0
@@ -15,6 +15,9 @@ exit 0
 #include "glad/glad.h"
 #include <GLFW/glfw3.h>
 
+#define min(a,b) ((a) < (b) ? (a) : (b))
+#define max(a,b) ((a) > (b) ? (a) : (b))
+#define clamp(val,minVal,maxVal) min(max(val, minVal), maxVal)
 #define vr static
 #define fn static
 #define string(...) #__VA_ARGS__
@@ -167,6 +170,8 @@ vr int test_counter = 0;
 #undef fn
 #define fn static
 
+
+// opengl helper functions
 fn char *shader_error_log(unsigned shader) {
 	
 	int length;
@@ -202,6 +207,9 @@ fn unsigned create_shader(unsigned prog, GLenum type, char *src) {
 	return r;
 }
 
+// creates a new shader program from source
+// i normally write shaders with the string macro
+// but you could load them from seperate files aswell
 fn unsigned create_program(char *vert_src, char *frag_src) {
 	
 	int error = 0;
@@ -229,7 +237,12 @@ fn void loop(GLFWwindow *window) {
 	
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	
-	// i use clip planes for this
+	#ifdef GLFW_RAW_MOUSE_MOTION
+	if(glfwRawMouseMotionSupported())
+		glfwSetInputMode(window, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
+	#endif
+	
+	// i use clip planes
 	glEnable(GL_CLIP_PLANE0);
 	glEnable(GL_CLIP_PLANE1);
 	glEnable(GL_CLIP_PLANE2);
@@ -239,23 +252,37 @@ fn void loop(GLFWwindow *window) {
 	// because the stencil buffer is slow and annoying
 	
 	unsigned prog = create_program("#version 130\n" string(
+		// the vertex shader
 		
-		uniform vec4 u_xy;
-		uniform vec4 u_yz;
-		uniform vec4 u_zx;
-		uniform vec4 u_pos;
-		uniform vec3 u_scale;
+		// shader variable prefixes
+		// i_* === input *
+		// o_* === output *
+		// v_* === varying *
+		// u_* === uniform *
+		
+		// per room attributes
+		// these probably belong in a buffer
+		// then you could draw everything in a single call
+		uniform vec4 u_xy; // clip cone in the xy plane
+		uniform vec4 u_yz; // clip cone in the yz plane
+		uniform vec4 u_zx; // these match the ones in struct View
+		uniform vec4 u_pos; // the position of the room relative to the camera
+		uniform vec3 u_scale; // the scale of the room
+		
+		
+		// globals
 		uniform vec3 u_rgt;
-		uniform vec3 u_uwd;
+		uniform vec3 u_uwd; // these 3 are the camera matrix essentially
 		uniform vec3 u_fwd;
-		uniform float u_t;
+		uniform float u_t; // time
 		
 		centroid out vec3 v_vert;
 		out vec3 v_nor;
 		out vec3 v_pos;
 		
 		// this is a cube mesh
-		// im too lazy for vertex buffers :/
+		// normally you would put these in a vertex buffer
+		// but since we only draw cubes i just use an array
 		const vec3 vert[6 * 4] = vec3[]
 		( vec3(-1.,-1.,-1.),vec3(-1.,-1.,+1.),vec3(-1.,+1.,+1.),vec3(-1.,+1.,-1.)
 		, vec3(-1.,-1.,-1.),vec3(+1.,-1.,-1.),vec3(+1.,-1.,+1.),vec3(-1.,-1.,+1.)
@@ -266,6 +293,7 @@ fn void loop(GLFWwindow *window) {
 		, vec3(-1.,-1.,+1.),vec3(+1.,-1.,+1.),vec3(+1.,+1.,+1.),vec3(-1.,+1.,+1.)
 		);
 		
+		// we also need normals
 		const vec3 nor[6] = vec3[]
 		( vec3(+1., 0., 0.)
 		, vec3( 0.,+1., 0.)
@@ -277,10 +305,13 @@ fn void loop(GLFWwindow *window) {
 		);
 		
 		void main() {
+			// the roomN_render functions call glDrawArrays(GL_QUADS, 0, 24)
+			// then we can use GL_VertexID and vert[] to get a cube
 			v_vert = vert[gl_VertexID] * u_scale;
 			v_nor = nor[gl_VertexID / 4];
 			v_pos = v_vert - u_pos.xyz;
 			
+			// this does the clipping
 			gl_ClipDistance[0] = dot(v_pos.xy, u_xy.xy);
 			gl_ClipDistance[1] = dot(v_pos.xy, u_xy.zw);
 			gl_ClipDistance[2] = dot(v_pos.yz, u_yz.xy);
@@ -295,14 +326,11 @@ fn void loop(GLFWwindow *window) {
 			, dot(v_pos, u_fwd) * 2.0);
 		}
 	), "#version 130\n" string(
-		uniform vec4 u_xy;
-		uniform vec4 u_yz;
-		uniform vec4 u_zx;
+		// the fragment shader
+		
+		// same as before
 		uniform vec4 u_pos;
 		uniform vec3 u_scale;
-		uniform vec3 u_rgt;
-		uniform vec3 u_uwd;
-		uniform vec3 u_fwd;
 		uniform float u_asd;
 		uniform int u_frame;
 		uniform float u_t;
@@ -324,7 +352,7 @@ fn void loop(GLFWwindow *window) {
 			vec3 H = fwidth(hash23(floor(gl_FragCoord.xy * .75)));
 			vec3 w = u_scale - abs(v_vert);
 			vec3 a = vec3(101.1234, 132.534, 647.12);
-			float t = step(0., floor(dot(sin(v_vert + H*fwidth(v_vert)), u_scale))) * .1;
+			float t = step(0., floor(dot(sin(v_vert+H*fwidth(v_vert)), u_scale)))*.1;
 			vec3 c = fract(1. / cos(u_pos.w) * a + t + v_nor * .1);
 			c = c / (c + dot(1. / (1. + w*w), vec3(.2)) + H * .1);
 			o_color = vec4(pow(c, vec3(.5)), 1.0);
@@ -332,11 +360,16 @@ fn void loop(GLFWwindow *window) {
 	));
 	
 	glUseProgram(prog);
+	
+	// the room draw functions set these before calling glDrawArrays
+	// to set the room position and so on
 	u_xy_id = glGetUniformLocation(prog, "u_xy");
 	u_yz_id = glGetUniformLocation(prog, "u_yz");
 	u_zx_id = glGetUniformLocation(prog, "u_zx");
 	u_pos_id = glGetUniformLocation(prog, "u_pos");
 	u_scale_id = glGetUniformLocation(prog, "u_scale");
+	
+	// and these are only used in the main loop
 	int u_rgt_id = glGetUniformLocation(prog, "u_rgt");
 	int u_uwd_id = glGetUniformLocation(prog, "u_uwd");
 	int u_fwd_id = glGetUniformLocation(prog, "u_fwd");
@@ -355,11 +388,8 @@ fn void loop(GLFWwindow *window) {
 	glfwGetCursorPos(window, &mx, &my);
 	glClearColor(0, 0, 0, 0);
 	glEnable(GL_CULL_FACE);
-	glDisable(GL_DEPTH_TEST);
-	glfwSwapInterval(0);
-	
-	if(glfwRawMouseMotionSupported())
-		glfwSetInputMode(window, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
+	glDisable(GL_DEPTH_TEST); // we dont need the depth buffer
+	glfwSwapInterval(0); // change it to 1 for vsync
 	
 	int jump = 0;
 	int _ix = 0;
@@ -403,8 +433,12 @@ fn void loop(GLFWwindow *window) {
 		float air_speed = 1;
 		float air_accel = 150;
 		
+		// speed = 1;
+		// accel = 170;
+		// friction = 0;
+		// air_accel = 170;
+		
 		{
-			
 			int ix = glfwGetKey(window, GLFW_KEY_D) - glfwGetKey(window, GLFW_KEY_A);
 			int iy = glfwGetKey(window, GLFW_KEY_E) - glfwGetKey(window, GLFW_KEY_Q);
 			int iz = glfwGetKey(window, GLFW_KEY_W) - glfwGetKey(window, GLFW_KEY_S);
@@ -557,6 +591,7 @@ int main(int argc, char *args[]) {
 	GLFWmonitor *monitor = glfwGetPrimaryMonitor();
 	const GLFWvidmode *mode = glfwGetVideoMode(monitor);
 	GLFWwindow *W = glfwCreateWindow(mode->width, mode->height, "", monitor, 0);
+	// glfwSetWindowMonitor(W, glfwGetPrimaryMonitor(), 0, 0, 1920, 1080, 362);
 	
 	if(W == 0) {
 		printf("Failed to open Window");
