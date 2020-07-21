@@ -370,7 +370,6 @@ def room(w, h, d):
 
     global header, lsroom
     index = len(lsroom)
-
     header += Template("""
         fn void room${index}_render(View v);
         fn View room${index}_update(View v, Room **r, float w, float d, float dt);
@@ -386,7 +385,6 @@ def room(w, h, d):
 
     lsroom += [["", "", ""]]
     return index
-
 
 def out():
     index = 0

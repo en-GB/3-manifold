@@ -13,6 +13,10 @@ if your not using windows you probably have to change the compiler flags at the 
 
 the level is defined in roomgen.py starting on line 421
 
+# other maps
+
+https://github.com/PyMaster22/manifold-maps
+
 # windows build instructions:
 
 - install this: https://www.msys2.org/ (make sure you follow steps 5-7 aswell)
@@ -21,9 +25,20 @@ the level is defined in roomgen.py starting on line 421
 - to install glfw type in ``pacman -S mingw-w64-x86_64-glfw`` and press enter
 - then drag 3_less.c into the window and press enter
 
+# debian/ubuntu build instructions
+- `apt install libglfw3-dev`
+- `apt install clang`
+- `python3 3_roomgen.py`
+- `clang 3_less.c -std=c99 -Wall -Werror -Wno-unused -lglfw -lm -ldl`
+
 # arch linux build instructions:
 
 - `pacman -S glfw-x11`
-    - if u use wayland `pacman -S glfw-wayland`
-- `python 3_roomgen.py`
-- `gcc 3_less.c -lglfw -lm -ldl`
+    - or if you use wayland `pacman -S glfw-wayland`
+- `pacman -S clang`
+- `python3 3_roomgen.py`
+- `clang 3_less.c -std=c99 -Wall -Werror -Wno-unused -lglfw -lm -ldl`
+
+
+these were contributed by other people so i dont know if they work
+
