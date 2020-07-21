@@ -1,9 +1,22 @@
-header = ""
-lsroom = []
-scale = 1
 from string import Template
 
+header = ""
+
+# lsroom: list of lists.
+# each element has the source code for that room's
+# render, update and cast_down functions
+lsroom = []
+
+# scale of everything, keep this number between .5 and 2 for reasonable results
+scale = 1
+
 def linkrgt(id0, id1, a, b, c, d, z, y):
+    """
+    defines a link from rooms id0->id1, on id0's right.
+    appends to the lsroom-list at element id0.
+    this way, multiple calls to link[direction] can be made to build up
+    source code for a particular room.
+    """
 
     a = a*float(scale)
     b = b*float(scale)
@@ -15,7 +28,6 @@ def linkrgt(id0, id1, a, b, c, d, z, y):
     r = lsroom[id0]
     s = ", ".join(map(lambda x: "%ff" % x, (a, b, c, d)))
 
-    # based on linkrgt
     r[0] += Template("""
         if(+v.px < room${id0}.w) {
             View door = View_through_rgt(v, room${id0}.w, ${s});
@@ -333,6 +345,10 @@ def linkbwd(id0, id1, a, b, c, d, x, y):
 
 
 def rgt(id0, z0, y0, id1, z1, y1, d, h):
+    """
+    links together the rooms id0 <-> id1 on id0's right.
+    this is bidirectional, in contrast to linkrgt defined above.
+    """
     linkrgt(id0, id1, z0 - d, z0 + d, y0 - h, y0 + h, z0 - z1, y0 - y1)
     linklft(id1, id0, z1 - d, z1 + d, y1 - h, y1 + h, z1 - z0, y1 - y0)
 
@@ -363,12 +379,18 @@ def bwd(id0, x0, y0, id1, x1, y1, w, h):
 
 
 def room(w, h, d):
+    """
+    creates a room (box) with the dimensions w,h and d.
+    creates space in the lsroom-list for this room.
+    returns the index of the room.
+    """
 
-    w *= scale
-    h *= scale
-    d *= scale
+    w *= float(scale)
+    h *= float(scale)
+    d *= float(scale)
 
     global header, lsroom
+
     index = len(lsroom)
     header += Template("""
         fn void room${index}_render(View v);
@@ -383,14 +405,17 @@ def room(w, h, d):
         };
     """).substitute(locals())
 
-    lsroom += [["", "", ""]]
+    # allocates space for the room
+    lsroom.append(["", "", ""])
     return index
 
 def out():
-    index = 0
+    """
+    prints the lsroom-list along with some boilerplate opengl-code.
+    """
     print("// AUTOGEN //")
     print(header)
-    for r, u, c in lsroom:
+    for index, (r, u, c) in enumerate(lsroom):
         s = "room%d.w, room%d.h, room%d.d" % (index, index, index)
         print(Template("""
             fn void room${index}_render(View v) {
@@ -429,11 +454,12 @@ def out():
             fn float room${index}_cast_down(View v, float d) {
                 if(d < v.py + room${index}.h)
                     return d;
-            
+
+                ${c}
+
                 return v.py + room${index}.h;
             }
         """).substitute(locals()))
-        index += 1
 
 
 # a = room(1, 2, 2)
@@ -441,14 +467,17 @@ def out():
 # fwd(a,0,0, b,0,0, 1, 2)
 
 
-scale = 1
+# scale = 1
 
+# creates 5 base-rooms with the given dimensions
 a = room(4, 2, 8)
 b = room(4, 6, 4)
 c = room(4, 6, 4)
 d = room(4, 2, 6)
 e = room(4, 2, 1)
 
+# link a<->b and a<->c with doors that are 4w 2h.
+# this is created at the specified positions
 uwd(a, 0, +4, b, 0, 0, 4, 2)
 uwd(a, 0, -4, c, 0, 0, 4, 2)
 
@@ -580,12 +609,12 @@ clb = room(2, 6, 1)
 fwd(col, +5, 0, cla, 0, 0, 2, 6)
 fwd(col, -5, 0, clb, 0, 0, 2, 6)
 
+# big wide and deep room
+n0 = room(10000, 4, 3000)
 
-n0 = room(1000, 4, 300)
-
+# create link forward to the second room
 fwd(n0, -0.5, -3, 2, -0.5, -0.5, 0.5, 0.5)
 rgt(n0, 0, 0, n0, 0, 0, 3, 4)
-# fwd(n0, 0, -3, n0, 0, -3, 1, 1)
 fwd(n0, +0.5, -3, n0, -0.5, -3, 0.5, 0.5)
 
 out()
