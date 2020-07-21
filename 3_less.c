@@ -15,6 +15,9 @@ exit 0
 #include "glad/glad.h"
 #include <GLFW/glfw3.h>
 
+#define PI 3.14159265358979323846
+#define HALF_PI 1.57079632679489661923
+
 #define min(a,b) ((a) < (b) ? (a) : (b))
 #define max(a,b) ((a) > (b) ? (a) : (b))
 #define clamp(val,minVal,maxVal) min(max(val, minVal), maxVal)
@@ -396,7 +399,7 @@ fn void loop(GLFWwindow *window) {
 	int _iy = 0;
 	int _iz = 0;
 	int _ij = 0;
-	
+
 	while(!glfwWindowShouldClose(window)) {
 		double time = glfwGetTime();
 		
@@ -422,8 +425,7 @@ fn void loop(GLFWwindow *window) {
 		P -= _my * 0.001f;
 		H -= _mx * 0.001f;
 		
-		if(P > +1.5707963f) P = +1.5707963f;
-		if(P < -1.5707963f) P = -1.5707963f;
+		P = clamp(P, -HALF_PI, HALF_PI);
 		if(H > +3.1415926f) H -= 6.2831852f;
 		if(H < -3.1415926f) H += 6.2831852f;
 		
