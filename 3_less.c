@@ -15,15 +15,14 @@ exit 0
 #include "glad/glad.h"
 #include <GLFW/glfw3.h>
 
-#define PI 3.14159265358979323846
-#define HALF_PI 1.57079632679489661923
+#define PI 3.14159265358979323846f
+#define TAU 6.28318530717958647692f
+#define HALF_PI 1.57079632679489661923f
 
-#define min(a,b) ((a) < (b) ? (a) : (b))
-#define max(a,b) ((a) > (b) ? (a) : (b))
-#define clamp(val,minVal,maxVal) min(max(val, minVal), maxVal)
 #define vr static
 #define fn static
 #define string(...) #__VA_ARGS__
+#define clamp(val, low, high) (min(max((val), (low)), (high)))
 
 #define assert(c, ...) \
 do { \
@@ -426,8 +425,8 @@ fn void loop(GLFWwindow *window) {
 		H -= _mx * 0.001f;
 		
 		P = clamp(P, -HALF_PI, HALF_PI);
-		if(H > +3.1415926f) H -= 6.2831852f;
-		if(H < -3.1415926f) H += 6.2831852f;
+		if(H > +PI) H -= TAU;
+		if(H < -PI) H += TAU;
 		
 		float speed = 8 - 4 * glfwGetKey(window, GLFW_KEY_LEFT_SHIFT);
 		float accel = 100;
