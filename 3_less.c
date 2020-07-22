@@ -22,6 +22,12 @@ exit 0
 #define vr static
 #define fn static
 #define string(...) #__VA_ARGS__
+#ifndef min
+#define min(a, b) ((a) < (b) ? (a) : (b))
+#endif
+#ifndef max
+#define max(a, b) ((a) > (b) ? (a) : (b))
+#endif
 #define clamp(val, low, high) (min(max((val), (low)), (high)))
 
 #define assert(c, ...) \
