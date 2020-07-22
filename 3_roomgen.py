@@ -434,11 +434,7 @@ def out():
 
             fn View room${index}_update(View v, Room **r, float w, float d, float dt) {
                 float x = v.vx * dt, y = v.vy * dt, z = v.vz * dt;
-                if(-room${index}.w < v.px && v.px < room${index}.w
-                && -room${index}.h < v.py && v.py < room${index}.h
-                && -room${index}.d < v.pz && v.pz < room${index}.d);
                 ${u}
-            
                 v.px += x;
                 v.py += y;
                 v.pz += z;
