@@ -13,10 +13,6 @@ if your not using windows you probably have to change the compiler flags at the 
 
 the level is defined in roomgen.py starting on line 421
 
-# other maps
-
-https://github.com/PyMaster22/manifold-maps
-
 # windows build instructions:
 
 - install this: https://www.msys2.org/ (make sure you follow steps 5-7 aswell)
