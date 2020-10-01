@@ -1,25 +1,10 @@
-# This is a fork of the project 3-manifold to update the roomgen.py to add random rooms sizes
-
-# Original README :
-
-# 3-manifold
-
-
-https://www.youtube.com/watch?v=CBPTcUxIISQ
-
-i made this around 2016
-
-
+# This is a fork of the project 3-manifold to update the roomgen.py to generate random rooms
 
 to run, execute 3_less.c
 
 if your not using windows you probably have to change the compiler flags at the top
 
 the level is defined in roomgen.py starting on line 421
-
-# other maps
-
-https://github.com/PyMaster22/manifold-maps
 
 # windows build instructions:
 
