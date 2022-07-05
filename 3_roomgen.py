@@ -60,15 +60,6 @@ def linkrgt(id0, id1, a, b, c, d, z, y):
                 v.pz = clamp(v.pz, ${a}f+d, ${b}f-d);
                 v.py = clamp(v.py, ${c}f+d, ${d}f-d);
 
-                // when v.pz and v.py are equal to some boundary,
-                // v.vz and v.vy would not be set to 0 before.
-                // now it always sets to 0
-
-                //if (v.pz == ${a}f+d || v.pz == ${b}f-d)
-                v.vz = 0;
-                //if(v.py == ${c}f+d || v.py == ${d}f-d)
-                v.vy = 0;
-
                 return v;
             }
 
@@ -118,9 +109,6 @@ def linklft(id0, id1, a, b, c, d, z, y):
                 v.pz = clamp(v.pz, ${a}f+d, ${b}f-d);
                 v.py = clamp(v.py, ${c}f+d, ${d}f-d);
 
-                v.vz = 0;
-                v.vy = 0;
-
                 return v;
             }
     """).substitute(locals())
@@ -169,9 +157,6 @@ def linkuwd(id0, id1, a, b, c, d, x, z):
                 v.px = clamp(v.px, ${a}f+d, ${b}f-d);
                 v.pz = clamp(v.pz, ${c}f+d, ${d}f-d);
 
-                v.vx = 0;
-                v.vz = 0;
-
                 return v;
            }
     """).substitute(locals())
@@ -218,9 +203,6 @@ def linkdwn(id0, id1, a, b, c, d, x, z):
 
             v.px = clamp(v.px, ${a}f+d, ${b}f-d);
             v.pz = clamp(v.pz, ${c}f+d, ${d}f-d);
-
-            v.vx = 0;
-            v.vz = 0;
 
             return v;
         }""").substitute(locals())
@@ -283,9 +265,6 @@ def linkfwd(id0, id1, a, b, c, d, x, y):
                 v.px = clamp(v.px, ${a}f+d, ${b}f-d);
                 v.py = clamp(v.py, ${c}f+d, ${d}f-d);
 
-                v.vx = 0;
-                v.vy = 0;
-
                 return v;
            }
     """).substitute(locals())
@@ -336,9 +315,6 @@ def linkbwd(id0, id1, a, b, c, d, x, y):
                v.px = clamp(v.px, ${a}f+d, ${b}f-d);
                v.py = clamp(v.py, ${c}f+d, ${d}f-d);
                
-               v.vx = 0;
-               v.vy = 0;
-
                return v;
            }
     """).substitute(locals())
